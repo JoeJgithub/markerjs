@@ -254,6 +254,36 @@ export class MarkerArea {
             marker.restoreState(previousState);
         }
     }
+    
+    public addMarkerAt = (
+        markerType: typeof MarkerBase, 
+        x: number,
+        y: number
+    ) => {
+        const marker = markerType.createMarker();
+        marker.onSelected = this.selectMarker;
+
+        if (marker.defs && marker.defs.length > 0) {
+            for (const d of marker.defs) {
+                if (d.id && !this.markerImage.getElementById(d.id)) {
+                    this.defs.appendChild(d);
+                }
+            }
+        }
+        
+        this.markers.push(marker);
+        this.selectMarker(marker);
+
+        this.markerImage.appendChild(marker.visual);
+
+        const bbox = marker.visual.getBBox();
+        const x = this.width / 2 / this.scale - bbox.width / 2;
+        const y = this.height / 2 / this.scale - bbox.height / 2;
+
+        const translate = marker.visual.transform.baseVal.getItem(0);
+        translate.setMatrix(translate.matrix.translate(x, y));
+        marker.visual.transform.baseVal.replaceItem(translate, 0);
+    }
 
     public deleteActiveMarker = () => {
         if (this.activeMarker) {
