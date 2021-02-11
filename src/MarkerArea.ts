@@ -257,8 +257,8 @@ export class MarkerArea {
     
     public addMarkerAt = (
         markerType: typeof MarkerBase, 
-        x: number,
-        y: number
+        xpos: number,
+        ypos: number
     ) => {
         const marker = markerType.createMarker();
         marker.onSelected = this.selectMarker;
@@ -277,8 +277,8 @@ export class MarkerArea {
         this.markerImage.appendChild(marker.visual);
 
         const bbox = marker.visual.getBBox();
-        const x = this.width / 2 / this.scale - bbox.width / 2;
-        const y = this.height / 2 / this.scale - bbox.height / 2;
+        const x = xpos
+        const y = ypos
 
         const translate = marker.visual.transform.baseVal.getItem(0);
         translate.setMatrix(translate.matrix.translate(x, y));
